@@ -1,0 +1,7 @@
+FROM rustlang/rust:nightly-bookworm-slim
+WORKDIR /app
+COPY src/ /app/src/
+COPY Cargo.toml /app
+COPY Cargo.lock /app
+RUN cargo install --path .
+CMD ["/usr/local/cargo/bin/rocket-date-server"]

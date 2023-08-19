@@ -1,0 +1,12 @@
+FROM rustlang/rust:nightly-alpine AS build-env
+RUN apk add -U musl-dev
+WORKDIR /app
+COPY src/ /app/src/
+COPY Cargo.toml /app
+COPY Cargo.lock /app
+RUN cargo install --path .
+
+FROM alpine
+WORKDIR /app
+COPY --from=build-env /usr/local/cargo/bin/rocket-date-server /app
+CMD ["/app/rocket-date-server"]

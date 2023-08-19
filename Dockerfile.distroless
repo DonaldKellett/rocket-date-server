@@ -1,0 +1,11 @@
+FROM rustlang/rust:nightly AS build-env
+WORKDIR /app
+COPY src/ /app/src/
+COPY Cargo.toml /app
+COPY Cargo.lock /app
+RUN cargo install --path .
+
+FROM gcr.io/distroless/cc:nonroot
+WORKDIR /app
+COPY --from=build-env /usr/local/cargo/bin/rocket-date-server /app
+CMD ["/app/rocket-date-server"]
